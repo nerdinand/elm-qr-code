@@ -1,6 +1,9 @@
 module Versions where
 
 import Array
+import List.Extra
+import Utilities
+import CondensedVersionInformation exposing (CondensedVersion)
 
 type alias Position = { x : Int, y : Int}
 type alias VersionInformation = {
@@ -16,59 +19,127 @@ type alias TimingPatternPosition = {
 }
 type Direction = Horizontal | Vertical
 
-versions : Array.Array VersionInformation
-versions =
-  Array.fromList [
-    -- Version 1
-    {
-      positionPatternPositions = [
-        {x = 0, y = 0}
-        , {x = 14, y = 0}
-        , {x = 0, y = 14}
-      ]
-      , alignmentPatternPositions = []
-      , timingPatternPositions = [
-        {x = 6, y = 8, length = 5, direction = Vertical}
-        , {x = 8, y = 6, length = 5, direction = Horizontal}
-      ]
-    }
+versionInformationFromCondensedVersion : CondensedVersion -> VersionInformation
+versionInformationFromCondensedVersion condensedVersion =
+  {
+    positionPatternPositions = positionPatternPositionsFromCondensedVersion condensedVersion
+    , alignmentPatternPositions = alignmentPatternPositionsFromCondensedVersion condensedVersion
+    , timingPatternPositions = timingPatternPositionsFromCondensedVersion condensedVersion
+  }
 
-    -- Version 2
-    , {
-      positionPatternPositions = [
-        {x = 0, y = 0}
-        , {x = 18, y = 0}
-        , {x = 0, y = 18}
-      ]
-      , alignmentPatternPositions = [
-        {x = 16, y = 16}
-      ]
-      , timingPatternPositions = [
-        {x = 6, y = 8, length = 9, direction = Vertical}
-        , {x = 8, y = 6, length = 9, direction = Horizontal}
-      ]
-    }
 
-    -- Version 7
-    , {
-      positionPatternPositions = [
-        {x = 0, y = 0}
-        , {x = 38, y = 0}
-        , {x = 0, y = 38}
-      ]
-      , alignmentPatternPositions = [
-        {x = 36, y = 36}
-        , {x = 20, y = 4}
-        , {x = 4, y = 20}
-        , {x = 20, y = 20}
-        , {x = 36, y = 20}
-        , {x = 20, y = 36}
-      ]
-      , timingPatternPositions = [
-        {x = 6, y = 8, length = 11, direction = Vertical}
-        , {x = 26, y = 6, length = 11, direction = Horizontal}
-        , {x = 8, y = 6, length = 11, direction = Horizontal}
-        , {x = 6, y = 26, length = 11, direction = Vertical}
-      ]
-    }
-  ]
+widthForVersionNumber : Int -> Int
+widthForVersionNumber versionNumber =
+  21 + ((versionNumber - 1) * 4)
+
+positionPatternPositionsFromCondensedVersion : CondensedVersion -> List Position
+positionPatternPositionsFromCondensedVersion condensedVersion =
+  let
+    positionPatternXY = (widthForVersionNumber condensedVersion.versionNumber) - 7
+  in
+    [
+      {x = 0, y = 0}
+      , {x = positionPatternXY, y = 0}
+      , {x = 0, y = positionPatternXY}
+    ]
+
+alignmentPatternPositionsFromCondensedVersion : CondensedVersion -> List Position
+alignmentPatternPositionsFromCondensedVersion condensedVersion =
+  List.map (
+    \position ->
+      {x = position.x - 2, y = position.y - 2}
+  ) (alignmentPatternPositionCentersFromCondensedVersion condensedVersion)
+
+alignmentPatternPositionCentersFromCondensedVersion : CondensedVersion -> List Position
+alignmentPatternPositionCentersFromCondensedVersion condensedVersion =
+  let
+    alignmentPatternPositionCenters = Array.fromList condensedVersion.alignmentPatternPositionCenters
+  in
+    case Array.length alignmentPatternPositionCenters of
+      0 -> []
+      2 ->
+        let
+          alignmentPatternXY1 = Maybe.withDefault 0 (Array.get 1 alignmentPatternPositionCenters)
+        in
+          [
+            {x = alignmentPatternXY1, y = alignmentPatternXY1}
+          ]
+      3 -> expandAlignmentPatternPositionCenters condensedVersion.alignmentPatternPositionCenters
+      4 -> expandAlignmentPatternPositionCenters condensedVersion.alignmentPatternPositionCenters
+      5 -> expandAlignmentPatternPositionCenters condensedVersion.alignmentPatternPositionCenters
+      6 -> expandAlignmentPatternPositionCenters condensedVersion.alignmentPatternPositionCenters
+      7 -> expandAlignmentPatternPositionCenters condensedVersion.alignmentPatternPositionCenters
+
+      _ ->
+        Debug.crash "Unexpected length of alignmentPatternPositionCenters"
+
+expandAlignmentPatternPositionCenters : List Int -> List Position
+expandAlignmentPatternPositionCenters alignmentPatternPositionCenters =
+  let
+    length = List.length alignmentPatternPositionCenters
+  in
+    Utilities.indexedFilter(
+      \index -> \item ->
+        not (
+          index == 0
+          || index == length - 1
+          || index == length * (length - 1)
+        )
+    ) (allPossiblePositions alignmentPatternPositionCenters)
+
+allPossiblePositions : List Int -> List Position
+allPossiblePositions alignmentPatternPositionCenters =
+  List.map (
+    \item ->
+      {x = Maybe.withDefault 0 (List.head item), y = Maybe.withDefault 0 (List.Extra.last item)}
+  ) (Utilities.allPossiblePairs alignmentPatternPositionCenters)
+
+timingPatternPositionsFromCondensedVersion : CondensedVersion -> List TimingPatternPosition
+timingPatternPositionsFromCondensedVersion condensedVersion =
+  let
+    length = List.length condensedVersion.alignmentPatternPositionCenters
+    alignmentPatternPositionCenters = allPossiblePositions condensedVersion.alignmentPatternPositionCenters
+  in
+    List.append (
+      timingPatternsBetweenAlignmentPatternPositionCenters (
+        Utilities.indexedFilter(
+          \index -> \item ->
+            index < length
+        ) alignmentPatternPositionCenters
+      ) Vertical
+    ) (
+      timingPatternsBetweenAlignmentPatternPositionCenters (
+        Utilities.indexedFilter(
+          \index -> \item ->
+            index % length == 0
+        ) alignmentPatternPositionCenters
+      ) Horizontal
+    )
+
+timingPatternsBetweenAlignmentPatternPositionCenters : List Position -> Direction -> List TimingPatternPosition
+timingPatternsBetweenAlignmentPatternPositionCenters alignmentPatternPositionCenters direction =
+  case List.length alignmentPatternPositionCenters of
+    0 -> []
+    1 -> []
+    _ ->  (
+            connectAlignmentPatternPositionCentersWithTimingPattern
+            (List.head alignmentPatternPositionCenters)
+            (List.head (Maybe.withDefault [] (List.tail alignmentPatternPositionCenters)))
+            direction
+          ) :: (
+            timingPatternsBetweenAlignmentPatternPositionCenters (
+              Maybe.withDefault [] (List.tail alignmentPatternPositionCenters)
+            ) direction
+          )
+
+connectAlignmentPatternPositionCentersWithTimingPattern : Maybe Position -> Maybe Position -> Direction -> TimingPatternPosition
+connectAlignmentPatternPositionCentersWithTimingPattern position1 position2 direction =
+  let
+    justPosition1 = Maybe.withDefault {x = 0, y = 0} position1
+    justPosition2 = Maybe.withDefault {x = 0, y = 0} position2
+  in
+    case direction of
+      Horizontal ->
+        {direction = direction, length = justPosition2.x - justPosition1.x, x = justPosition1.x, y = justPosition1.y}
+      Vertical ->
+        {direction = direction, length = justPosition2.y - justPosition1.y, x = justPosition1.x, y = justPosition1.y}
