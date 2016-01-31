@@ -7,6 +7,7 @@ import Versions
 import CondensedVersionInformation
 import Drawing
 import Utilities
+import Encoding
 
 svgHeader : List Svg -> Html
 svgHeader =
@@ -19,7 +20,7 @@ main =
       Drawing.drawVersionInformationPatterns (
         Maybe.Just (
           Versions.versionInformationFromCondensedVersion (
-            CondensedVersionInformation.condensedVersionForVersionNumber 40
+            CondensedVersionInformation.condensedVersionForVersionNumber 24
           )
         )
       )
