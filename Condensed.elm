@@ -1,24 +1,24 @@
-module CondensedVersionInformation where
+module Condensed where
 
 import Array
 
-type alias CondensedVersion = {
+type alias Version = {
   versionNumber : Int
   , alignmentPatternPositionCenters : List Int
 }
 
-condensedVersionForVersionNumber : Int -> CondensedVersion
+condensedVersionForVersionNumber : Int -> Version
 condensedVersionForVersionNumber versionNumber =
   Maybe.withDefault emptyVersion (Array.get (versionNumber - 1) condensedVersions)
 
-emptyVersion : CondensedVersion
+emptyVersion : Version
 emptyVersion =
   {
     versionNumber = 0
     , alignmentPatternPositionCenters = []
   }
 
-condensedVersions : Array.Array CondensedVersion
+condensedVersions : Array.Array Version
 condensedVersions =
   Array.fromList [
     {

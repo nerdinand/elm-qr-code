@@ -4,7 +4,7 @@ import Html exposing (Html)
 import Array
 
 import Versions
-import CondensedVersionInformation
+import Condensed
 import Drawing
 import Utilities
 import Encoding
@@ -15,7 +15,7 @@ svgHeader =
 
 main : Html
 main =
-  CondensedVersionInformation.condensedVersionForVersionNumber 16
+  Condensed.condensedVersionForVersionNumber 16
     |> Versions.versionInformationFromCondensedVersion
     |> Maybe.Just
     |> Drawing.drawVersionInformationPatterns
