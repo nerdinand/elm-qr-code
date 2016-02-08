@@ -15,14 +15,9 @@ svgHeader =
 
 main : Html
 main =
-  svgHeader (
-    Utilities.flatten (
-      Drawing.drawVersionInformationPatterns (
-        Maybe.Just (
-          Versions.versionInformationFromCondensedVersion (
-            CondensedVersionInformation.condensedVersionForVersionNumber 24
-          )
-        )
-      )
-    )
-  )
+  CondensedVersionInformation.condensedVersionForVersionNumber 16
+    |> Versions.versionInformationFromCondensedVersion
+    |> Maybe.Just
+    |> Drawing.drawVersionInformationPatterns
+    |> Utilities.flatten
+    |> svgHeader
