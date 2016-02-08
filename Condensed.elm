@@ -7,19 +7,19 @@ type alias Version = {
   , alignmentPatternPositionCenters : List Int
 }
 
-condensedVersionForVersionNumber : Int -> Version
-condensedVersionForVersionNumber versionNumber =
-  Maybe.withDefault emptyVersion (Array.get (versionNumber - 1) condensedVersions)
+lookUpVersion : Int -> Version
+lookUpVersion versionNumber =
+  Maybe.withDefault emptyVersionData (Array.get (versionNumber - 1) versionData)
 
-emptyVersion : Version
-emptyVersion =
+emptyVersionData : Version
+emptyVersionData =
   {
     versionNumber = 0
     , alignmentPatternPositionCenters = []
   }
 
-condensedVersions : Array.Array Version
-condensedVersions =
+versionData : Array.Array Version
+versionData =
   Array.fromList [
     {
       versionNumber = 1

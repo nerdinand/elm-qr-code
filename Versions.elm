@@ -19,12 +19,12 @@ type alias TimingPatternPosition = {
 }
 type Direction = Horizontal | Vertical
 
-versionInformationFromCondensedVersion : Condensed.Version -> VersionInformation
-versionInformationFromCondensedVersion condensedVersion =
+expand : Condensed.Version -> VersionInformation
+expand condensedVersion =
   {
-    positionPatternPositions = positionPatternPositionsFromCondensedVersion condensedVersion
-    , alignmentPatternPositions = alignmentPatternPositionsFromCondensedVersion condensedVersion
-    , timingPatternPositions = timingPatternPositionsFromCondensedVersion condensedVersion
+    positionPatternPositions = positionPatterns condensedVersion
+    , alignmentPatternPositions = alignmentPatternPositions condensedVersion
+    , timingPatternPositions = timingPatternPositions condensedVersion
   }
 
 
@@ -32,8 +32,8 @@ widthForVersionNumber : Int -> Int
 widthForVersionNumber versionNumber =
   21 + ((versionNumber - 1) * 4)
 
-positionPatternPositionsFromCondensedVersion : Condensed.Version -> List Position
-positionPatternPositionsFromCondensedVersion condensedVersion =
+positionPatterns : Condensed.Version -> List Position
+positionPatterns condensedVersion =
   let
     positionPatternXY = (widthForVersionNumber condensedVersion.versionNumber) - 7
   in
@@ -43,15 +43,15 @@ positionPatternPositionsFromCondensedVersion condensedVersion =
       , {x = 0, y = positionPatternXY}
     ]
 
-alignmentPatternPositionsFromCondensedVersion : Condensed.Version -> List Position
-alignmentPatternPositionsFromCondensedVersion condensedVersion =
+alignmentPatternPositions : Condensed.Version -> List Position
+alignmentPatternPositions condensedVersion =
   List.map (
     \position ->
       {x = position.x - 2, y = position.y - 2}
-  ) (alignmentPatternPositionCentersFromCondensedVersion condensedVersion)
+  ) (alignmentPatternPositionCenters condensedVersion)
 
-alignmentPatternPositionCentersFromCondensedVersion : Condensed.Version -> List Position
-alignmentPatternPositionCentersFromCondensedVersion condensedVersion =
+alignmentPatternPositionCenters : Condensed.Version -> List Position
+alignmentPatternPositionCenters condensedVersion =
   let
     alignmentPatternPositionCenters = Array.fromList condensedVersion.alignmentPatternPositionCenters
   in
@@ -94,8 +94,8 @@ allPossiblePositions alignmentPatternPositionCenters =
       {x = Maybe.withDefault 0 (List.head item), y = Maybe.withDefault 0 (List.Extra.last item)}
   ) (Utilities.allPossiblePairs alignmentPatternPositionCenters)
 
-timingPatternPositionsFromCondensedVersion : Condensed.Version -> List TimingPatternPosition
-timingPatternPositionsFromCondensedVersion condensedVersion =
+timingPatternPositions : Condensed.Version -> List TimingPatternPosition
+timingPatternPositions condensedVersion =
   let
     length = List.length condensedVersion.alignmentPatternPositionCenters
     alignmentPatternPositionCenters = allPossiblePositions condensedVersion.alignmentPatternPositionCenters
