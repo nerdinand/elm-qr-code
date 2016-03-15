@@ -15,7 +15,7 @@ svgHeader =
 
 main : Html
 main =
-  Condensed.lookUpVersion 16
+  Condensed.lookUpVersion 12
     |> Versions.expand
     |> Maybe.Just
     |> Drawing.drawVersionInformationPatterns
