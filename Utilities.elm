@@ -1,4 +1,4 @@
-module Utilities where
+module Utilities (flatten, allPossiblePairs, indexedFilter) where
 
 flatten : List (List a) -> List a
 flatten list =

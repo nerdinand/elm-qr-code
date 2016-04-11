@@ -9,10 +9,6 @@ import Drawing
 import Utilities
 import Encoding
 
-svgHeader : List Svg -> Html
-svgHeader =
-  svg [ version "1.1", width "1000", height "1000", viewBox "0 0 200 200" ]
-
 main : Html
 main =
   Condensed.lookUpVersion 16
@@ -21,3 +17,7 @@ main =
     |> Drawing.drawVersionInformationPatterns
     |> Utilities.flatten
     |> svgHeader
+
+svgHeader : List Svg -> Html
+svgHeader =
+  svg [ version "1.1", width "1000", height "1000", viewBox "0 0 200 200" ]

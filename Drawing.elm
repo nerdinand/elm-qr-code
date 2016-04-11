@@ -1,4 +1,4 @@
-module Drawing where
+module Drawing (drawVersionInformationPatterns) where
 
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
@@ -8,7 +8,7 @@ import Versions
 import Utilities
 
 quietZoneOffset =
-  { x = 4, y = 4}
+  { x = 4, y = 4 }
 
 drawVersionInformationPatterns : Maybe Versions.VersionInformation -> List (List Svg)
 drawVersionInformationPatterns versionInformation =
