@@ -4,8 +4,8 @@ import String
 
 encodeNumeric : String -> String
 encodeNumeric input =
-  "partitionNumericString input"
+  --partitionNumericString input
+  input
 
 --partitionNumericString : String -> List String
 --partitionNumericString input =
-
