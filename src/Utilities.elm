@@ -1,8 +1,10 @@
 module Utilities (flatten, allPossiblePairs, indexedFilter) where
 
+
 flatten : List (List a) -> List a
 flatten list =
   List.foldr (++) [] list
+
 
 allPossiblePairs : List a -> List (List a)
 allPossiblePairs list =
@@ -15,6 +17,7 @@ allPossiblePairs list =
         ) list
     ) list
   )
+
 
 indexedFilter : (Int -> a -> Bool) -> List a -> List a
 indexedFilter p xs =

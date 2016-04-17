@@ -1,15 +1,14 @@
 {
     "version": "1.0.0",
-    "summary": "helpful summary of your project, less than 80 characters",
-    "repository": "https://github.com/user/project.git",
-    "license": "BSD3",
+    "summary": "An attempt at implementing a QR code library in Elm.",
+    "repository": "https://github.com/nerdinand/elm-qr-code.git",
+    "license": "MIT",
     "source-directories": [
-        "."
+        "src/"
     ],
     "exposed-modules": [],
     "dependencies": {
         "circuithub/elm-list-extra": "3.9.0 <= v < 4.0.0",
-        "deadfoxygrandpa/elm-test": "3.1.1 <= v < 4.0.0",
         "elm-lang/core": "3.0.0 <= v < 4.0.0",
         "evancz/elm-html": "4.0.2 <= v < 5.0.0",
         "evancz/elm-svg": "2.0.1 <= v < 3.0.0"

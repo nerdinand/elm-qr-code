@@ -9,6 +9,7 @@ import Drawing
 import Utilities
 import Encoding
 
+
 main : Html
 main =
   Condensed.lookUpVersion 12
@@ -17,6 +18,7 @@ main =
     |> Drawing.drawVersionInformationPatterns
     |> Utilities.flatten
     |> svgHeader
+
 
 svgHeader : List Svg -> Html
 svgHeader =

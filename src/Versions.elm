@@ -5,19 +5,24 @@ import List.Extra
 import Utilities
 import Condensed
 
-type alias Position = { x : Int, y : Int}
+
+type alias Position = { x : Int, y : Int }
+
 type alias VersionInformation = {
   positionPatternPositions : List Position
   , alignmentPatternPositions : List Position
   , timingPatternPositions : List TimingPatternPosition
 }
+
 type alias TimingPatternPosition = {
   x : Int
   , y : Int
   , length : Int
   , direction : Direction
 }
+
 type Direction = Horizontal | Vertical
+
 
 expand : Condensed.Version -> VersionInformation
 expand condensedVersion =
@@ -32,6 +37,7 @@ widthForVersionNumber : Int -> Int
 widthForVersionNumber versionNumber =
   21 + ((versionNumber - 1) * 4)
 
+
 positionPatterns : Condensed.Version -> List Position
 positionPatterns condensedVersion =
   let
@@ -43,12 +49,14 @@ positionPatterns condensedVersion =
       , {x = 0, y = positionPatternXY}
     ]
 
+
 alignmentPatternPositions : Condensed.Version -> List Position
 alignmentPatternPositions condensedVersion =
   List.map (
     \position ->
       {x = position.x - 2, y = position.y - 2}
   ) (alignmentPatternPositionCenters condensedVersion)
+
 
 alignmentPatternPositionCenters : Condensed.Version -> List Position
 alignmentPatternPositionCenters condensedVersion =
@@ -73,6 +81,7 @@ alignmentPatternPositionCenters condensedVersion =
       _ ->
         Debug.crash "Unexpected length of alignmentPatternPositionCenters"
 
+
 expandAlignmentPatternPositionCenters : List Int -> List Position
 expandAlignmentPatternPositionCenters alignmentPatternPositionCenters =
   let
@@ -87,12 +96,14 @@ expandAlignmentPatternPositionCenters alignmentPatternPositionCenters =
         )
     ) (allPossiblePositions alignmentPatternPositionCenters)
 
+
 allPossiblePositions : List Int -> List Position
 allPossiblePositions alignmentPatternPositionCenters =
   List.map (
     \item ->
       {x = Maybe.withDefault 0 (List.head item), y = Maybe.withDefault 0 (List.Extra.last item)}
   ) (Utilities.allPossiblePairs alignmentPatternPositionCenters)
+
 
 timingPatternPositions : Condensed.Version -> List TimingPatternPosition
 timingPatternPositions condensedVersion =
@@ -116,6 +127,7 @@ timingPatternPositions condensedVersion =
       ) Horizontal
     )
 
+
 timingPatternsBetweenAlignmentPatternPositionCenters : List Position -> Direction -> List TimingPatternPosition
 timingPatternsBetweenAlignmentPatternPositionCenters alignmentPatternPositionCenters direction =
   case List.length alignmentPatternPositionCenters of
@@ -131,6 +143,7 @@ timingPatternsBetweenAlignmentPatternPositionCenters alignmentPatternPositionCen
               Maybe.withDefault [] (List.tail alignmentPatternPositionCenters)
             ) direction
           )
+
 
 connectAlignmentPatternPositionCentersWithTimingPattern : Maybe Position -> Maybe Position -> Direction -> TimingPatternPosition
 connectAlignmentPatternPositionCentersWithTimingPattern position1 position2 direction =

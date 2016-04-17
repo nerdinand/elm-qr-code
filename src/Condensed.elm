@@ -1,15 +1,19 @@
 module Condensed (Version, lookUpVersion) where
 
+
 import Array
+
 
 type alias Version = {
   versionNumber : Int
   , alignmentPatternPositionCenters : List Int
 }
 
+
 lookUpVersion : Int -> Version
 lookUpVersion versionNumber =
   Maybe.withDefault emptyVersionData (Array.get (versionNumber - 1) versionData)
+
 
 emptyVersionData : Version
 emptyVersionData =
@@ -17,6 +21,7 @@ emptyVersionData =
     versionNumber = 0
     , alignmentPatternPositionCenters = []
   }
+
 
 versionData : Array.Array Version
 versionData =

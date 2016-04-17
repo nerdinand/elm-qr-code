@@ -1,5 +1,6 @@
 module Drawing (drawVersionInformationPatterns) where
 
+
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 
@@ -7,8 +8,10 @@ import Patterns
 import Versions
 import Utilities
 
+
 quietZoneOffset =
   { x = 4, y = 4 }
+
 
 drawVersionInformationPatterns : Maybe Versions.VersionInformation -> List (List Svg)
 drawVersionInformationPatterns versionInformation =
@@ -21,13 +24,16 @@ drawVersionInformationPatterns versionInformation =
       ]
     Nothing -> []
 
+
 drawPositionPatterns : Versions.VersionInformation -> List (List Svg)
 drawPositionPatterns versionInformation =
   drawPatterns versionInformation.positionPatternPositions Patterns.positionPattern
 
+
 drawAlignmentPatterns : Versions.VersionInformation -> List (List Svg)
 drawAlignmentPatterns versionInformation =
   drawPatterns versionInformation.alignmentPatternPositions Patterns.alignmentPattern
+
 
 drawTimingPatterns : Versions.VersionInformation -> List (List Svg)
 drawTimingPatterns versionInformation =
@@ -36,12 +42,14 @@ drawTimingPatterns versionInformation =
       drawDottedLine timingPatternPosition.x timingPatternPosition.y timingPatternPosition.length timingPatternPosition.direction
   ) versionInformation.timingPatternPositions
 
+
 drawPatterns : List Versions.Position -> Patterns.Pattern -> List (List Svg)
 drawPatterns positions pattern =
   List.map (
     \position ->
       drawPattern position.x position.y pattern
   ) positions
+
 
 drawPattern : Int -> Int -> Patterns.Pattern -> List Svg
 drawPattern xCoordinate yCoordinate pattern =
@@ -51,6 +59,7 @@ drawPattern xCoordinate yCoordinate pattern =
         drawRow xCoordinate (yCoordinate + index) row
     ) pattern
   )
+
 
 drawDottedLine : Int -> Int -> Int -> Versions.Direction -> List Svg
 drawDottedLine xCoordinate yCoordinate length direction =
@@ -68,6 +77,7 @@ drawDottedLine xCoordinate yCoordinate length direction =
         ) [yCoordinate..(yCoordinate + length - 1)]
   )
 
+
 drawRow : Int -> Int -> List Int -> List Svg
 drawRow xCoordinate yCoordinate row =
   List.filterMap identity (
@@ -76,6 +86,7 @@ drawRow xCoordinate yCoordinate row =
         drawPixel (xCoordinate + index) yCoordinate value
     ) row
   )
+
 
 drawPixel : Int -> Int -> Int -> Maybe Svg
 drawPixel xCoordinate yCoordinate value =

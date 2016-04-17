@@ -1,6 +1,8 @@
 module Patterns (Pattern, positionPattern, alignmentPattern) where
 
+
 type alias Pattern = List (List Int)
+
 
 positionPattern : Pattern
 positionPattern =
@@ -13,6 +15,7 @@ positionPattern =
     , [1, 0, 0, 0, 0, 0, 1]
     , [1, 1, 1, 1, 1, 1, 1]
   ]
+
 
 alignmentPattern : Pattern
 alignmentPattern =
