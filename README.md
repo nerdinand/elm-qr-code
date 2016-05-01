@@ -19,7 +19,7 @@ For information about the QR code standard, read [the specification](http://www.
 
 ## To do
 
-* Reed-Solomon error correction coding
+* Reed-Solomon error correction coding (see sub-project: https://github.com/nerdinand/elm-reed-solomon)
 * Interleaving data and error correction data
 * Codeword placement
 * Masking
