@@ -1,4 +1,4 @@
-module Utilities (flatten, allPossiblePairs, indexedFilter) where
+module Utilities exposing (flatten, allPossiblePairs, indexedFilter)
 
 
 flatten : List (List a) -> List a

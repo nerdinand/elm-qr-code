@@ -1,4 +1,4 @@
-module Encoding where
+module Encoding exposing (encodeNumeric)
 
 import String
 import Bitwise exposing (shiftRight, and)

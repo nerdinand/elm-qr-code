@@ -1,4 +1,4 @@
-module Versions (Position, VersionInformation, Direction (..), expand) where
+module Versions exposing (Position, VersionInformation, Direction (..), expand)
 
 import Array
 import List.Extra

@@ -1,4 +1,4 @@
-module Drawing (drawVersionInformationPatterns) where
+module Drawing exposing (drawVersionInformationPatterns)
 
 
 import Svg exposing (..)
@@ -13,7 +13,7 @@ quietZoneOffset =
   { x = 4, y = 4 }
 
 
-drawVersionInformationPatterns : Maybe Versions.VersionInformation -> List (List Svg)
+drawVersionInformationPatterns : Maybe Versions.VersionInformation -> List (List (Svg String))
 drawVersionInformationPatterns versionInformation =
   case versionInformation of
     Just versionInformation ->
@@ -25,17 +25,17 @@ drawVersionInformationPatterns versionInformation =
     Nothing -> []
 
 
-drawPositionPatterns : Versions.VersionInformation -> List (List Svg)
+drawPositionPatterns : Versions.VersionInformation -> List (List (Svg String))
 drawPositionPatterns versionInformation =
   drawPatterns versionInformation.positionPatternPositions Patterns.positionPattern
 
 
-drawAlignmentPatterns : Versions.VersionInformation -> List (List Svg)
+drawAlignmentPatterns : Versions.VersionInformation -> List (List (Svg String))
 drawAlignmentPatterns versionInformation =
   drawPatterns versionInformation.alignmentPatternPositions Patterns.alignmentPattern
 
 
-drawTimingPatterns : Versions.VersionInformation -> List (List Svg)
+drawTimingPatterns : Versions.VersionInformation -> List (List (Svg String))
 drawTimingPatterns versionInformation =
   List.map (
     \timingPatternPosition ->
@@ -43,7 +43,7 @@ drawTimingPatterns versionInformation =
   ) versionInformation.timingPatternPositions
 
 
-drawPatterns : List Versions.Position -> Patterns.Pattern -> List (List Svg)
+drawPatterns : List Versions.Position -> Patterns.Pattern -> List (List (Svg String))
 drawPatterns positions pattern =
   List.map (
     \position ->
@@ -51,7 +51,7 @@ drawPatterns positions pattern =
   ) positions
 
 
-drawPattern : Int -> Int -> Patterns.Pattern -> List Svg
+drawPattern : Int -> Int -> Patterns.Pattern -> List (Svg String)
 drawPattern xCoordinate yCoordinate pattern =
   Utilities.flatten (
     List.indexedMap (
@@ -61,7 +61,7 @@ drawPattern xCoordinate yCoordinate pattern =
   )
 
 
-drawDottedLine : Int -> Int -> Int -> Versions.Direction -> List Svg
+drawDottedLine : Int -> Int -> Int -> Versions.Direction -> List (Svg String)
 drawDottedLine xCoordinate yCoordinate length direction =
   List.filterMap identity (
     case direction of
@@ -78,7 +78,7 @@ drawDottedLine xCoordinate yCoordinate length direction =
   )
 
 
-drawRow : Int -> Int -> List Int -> List Svg
+drawRow : Int -> Int -> List Int -> List (Svg String)
 drawRow xCoordinate yCoordinate row =
   List.filterMap identity (
     List.indexedMap (
@@ -88,7 +88,7 @@ drawRow xCoordinate yCoordinate row =
   )
 
 
-drawPixel : Int -> Int -> Int -> Maybe Svg
+drawPixel : Int -> Int -> Int -> Maybe (Svg String)
 drawPixel xCoordinate yCoordinate value =
   if value == 1 then
     Just (

@@ -1,4 +1,4 @@
-module Condensed (Version, lookUpVersion) where
+module Condensed exposing (Version, lookUpVersion)
 
 
 import Array

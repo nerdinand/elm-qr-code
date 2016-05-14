@@ -1,4 +1,4 @@
-module Patterns (Pattern, positionPattern, alignmentPattern) where
+module Patterns exposing (Pattern, positionPattern, alignmentPattern)
 
 
 type alias Pattern = List (List Int)
