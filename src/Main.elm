@@ -13,14 +13,14 @@ import Encoding
 
 main : Html String
 main =
-  Condensed.lookUpVersion 12
-    |> Versions.expand
-    |> Maybe.Just
-    |> Drawing.drawVersionInformationPatterns
-    |> Utilities.flatten
-    |> svgHeader
+    Condensed.lookUpVersion 12
+        |> Versions.expand
+        |> Maybe.Just
+        |> Drawing.drawVersionInformationPatterns
+        |> Utilities.flatten
+        |> svgHeader
 
 
 svgHeader : List (Svg String) -> Html String
 svgHeader =
-  svg [ version "1.1", width "1000", height "1000", viewBox "0 0 200 200" ]
+    svg [ version "1.1", width "1000", height "1000", viewBox "0 0 200 200" ]

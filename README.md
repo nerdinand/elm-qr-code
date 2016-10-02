@@ -12,14 +12,14 @@ For information about the QR code standard, read [the specification](http://www.
 
 * Drawing of the function patterns of all versions (sizes) of QR codes in SVG format:
   * Position patterns (the big ones in the corners)
-  * Alignment patterns (the the smaller ones in the lower right corner and in between)
+  * Alignment patterns (the smaller ones in the lower right corner and in between)
   * Timing patterns (the dotted lines between the other patterns)
 * Encoding modes
   * Numeric mode
+* Reed-Solomon error correction coding (see sub-project: https://github.com/nerdinand/elm-reed-solomon)
 
 ## To do
 
-* Reed-Solomon error correction coding (see sub-project: https://github.com/nerdinand/elm-reed-solomon)
 * Interleaving data and error correction data
 * Codeword placement
 * Masking
