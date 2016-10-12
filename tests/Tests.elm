@@ -4,6 +4,7 @@ import Test exposing (..)
 import Expect
 import String
 import Encoding
+import Fuzz
 
 
 all : Test
@@ -13,12 +14,19 @@ all =
             [ test "Encode 01234567" <|
                 \() ->
                     "01234567"
-                        |> Encoding.encodeNumeric
+                        |> Encoding.encode
                         |> Expect.equal "00010000001000000000110001010110011000011"
             , test "Encode 0123456789012345" <|
                 \() ->
                     "0123456789012345"
-                        |> Encoding.encodeNumeric
+                        |> Encoding.encode
                         |> Expect.equal "00010000010000000000110001010110011010100110111000010100111010100101"
+            , fuzz (Fuzz.intRange 0 2147483647) "encoding result only contains 0 and 1" <|
+                \randominteger ->
+                    randominteger
+                        |> toString
+                        |> Encoding.encode
+                        |> String.all (\char -> char == '0' || char == '1')
+                        |> Expect.equal True
             ]
         ]
