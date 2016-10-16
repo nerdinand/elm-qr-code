@@ -9,6 +9,7 @@
     "exposed-modules": [],
     "dependencies": {
         "elm-community/elm-list-extra": "1.0.0 <= v < 2.0.0",
+        "elm-community/list-split": "1.0.1 <= v < 2.0.0",
         "elm-lang/core": "4.0.0 <= v < 5.0.0",
         "elm-lang/html": "1.0.0 <= v < 2.0.0",
         "elm-lang/svg": "1.0.0 <= v < 2.0.0"

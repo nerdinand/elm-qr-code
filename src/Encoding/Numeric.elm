@@ -1,15 +1,15 @@
 module Encoding.Numeric exposing (encode)
 
 import String
-import Bitwise exposing (shiftRight, and)
 import Array
+import Encoding.Utility
 
 
 encode : String -> String
 encode input =
     String.join ""
         (modeIndicatorBinaryString
-            :: encodeBinaryWithLength (toString (String.length input)) 9
+            :: Encoding.Utility.encodeBinaryWithLength (toString (String.length input)) 9
             :: List.map encodeBinary (partitionNumericString input)
         )
 
@@ -27,26 +27,9 @@ partitionNumericString input =
         (String.left 3 input) :: (partitionNumericString (String.dropLeft 3 input))
 
 
-encodeBinaryWithLength : String -> Int -> String
-encodeBinaryWithLength input length =
-    let
-        integer =
-            Result.withDefault 0 (String.toInt input)
-    in
-        String.reverse
-            (String.join ""
-                (List.map
-                    (\bitIndex ->
-                        toString ((integer `shiftRight` bitIndex) `and` 1)
-                    )
-                    [0..length]
-                )
-            )
-
-
 encodeBinary : String -> String
 encodeBinary input =
-    encodeBinaryWithLength input (requiredBits input)
+    Encoding.Utility.encodeBinaryWithLength input (requiredBits input)
 
 
 requiredBits : String -> Int
