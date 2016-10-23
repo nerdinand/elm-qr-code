@@ -1,10 +1,17 @@
-module Encoding exposing (encode, isAlphanumeric)
+module Encoding exposing (encode, isAlphanumeric, Mode(..))
 
 import String
 import Char
 import Encoding.Numeric
 import Encoding.Alphanumeric
 import Regex
+
+
+type Mode
+    = Numeric
+    | Alphanumeric
+    | Byte
+    | Kanji
 
 
 encode : String -> String
