@@ -6,12 +6,25 @@ import String
 import Encoding
 import DataAnalysis
 import Fuzz
+import Module exposing (..)
 
 
 all : Test
 all =
     describe "elm-qr-code"
-        [ describe "Data analysis"
+        [ describe "Module"
+            [ test "Module.toString 01011001" <|
+                \() ->
+                    [ Zero, One, Zero, One, One, Zero, Zero, One ]
+                        |> Module.toString
+                        |> Expect.equal "01011001"
+            , test "Module.toModules filters out everything but 0 and 1" <|
+                \() ->
+                    "01a011v00s1haha"
+                        |> Module.toModules
+                        |> Expect.equal [ Zero, One, Zero, One, One, Zero, Zero, One ]
+            ]
+        , describe "Data analysis"
             [ describe "DataAnalysis.modeForData"
                 [ test "012346789" <|
                     \() ->
@@ -36,7 +49,7 @@ all =
                     , fuzz (Fuzz.intRange 0 2147483647) "encoding result only contains 0 and 1" <|
                         \randominteger ->
                             randominteger
-                                |> toString
+                                |> Basics.toString
                                 |> Encoding.encode
                                 |> String.all (\char -> char == '0' || char == '1')
                                 |> Expect.equal True
