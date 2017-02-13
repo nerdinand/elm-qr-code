@@ -1,6 +1,6 @@
 module Encoding.Utility exposing (encodeBinaryWithLength)
 
-import Bitwise exposing (shiftRight, and)
+import Bitwise exposing (shiftRightBy, and)
 import String
 
 
@@ -14,8 +14,8 @@ encodeBinaryWithLength input length =
             (String.join ""
                 (List.map
                     (\bitIndex ->
-                        toString ((integer `shiftRight` bitIndex) `and` 1)
+                        toString ((shiftRightBy integer bitIndex) |> and 1)
                     )
-                    [0..length]
+                    (List.range 0 length)
                 )
             )

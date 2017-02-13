@@ -1,4 +1,4 @@
-module ErrorCorrection exposing (Level)
+module ErrorCorrection exposing (Level(..))
 
 
 type Level

@@ -3,24 +3,13 @@ module Main exposing (..)
 import Svg exposing (..)
 import Svg.Attributes exposing (..)
 import Html exposing (Html)
-import Array
-import Versions
-import Condensed
-import Drawing
-import Utilities
-import Encoding
 
 
-main : Html String
+main : Html msg
 main =
-    Condensed.lookUpVersion 12
-        |> Versions.expand
-        |> Maybe.Just
-        |> Drawing.drawVersionInformationPatterns
-        |> Utilities.flatten
-        |> svgHeader
+    svgHeader
 
 
-svgHeader : List (Svg String) -> Html String
+svgHeader : Html msg
 svgHeader =
-    svg [ version "1.1", width "1000", height "1000", viewBox "0 0 200 200" ]
+    svg [ version "1.1", width "1000", height "1000", viewBox "0 0 200 200" ] []
