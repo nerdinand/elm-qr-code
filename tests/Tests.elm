@@ -9,6 +9,7 @@ import Fuzz
 import Module exposing (..)
 import Versions exposing (Version(..))
 import EncodingMode exposing (..)
+import ErrorCorrection exposing (Level(..))
 
 
 all : Test
@@ -56,6 +57,17 @@ all =
                         "HELLO WORLD"
                             |> DataAnalysis.versionForData
                             |> Expect.equal Version02
+                , test "0123456789012345678901234567890" <|
+                    \() ->
+                        "0123456789012345678901234567890"
+                            |> DataAnalysis.versionForData
+                            |> Expect.equal Version02
+                ]
+            , describe "DataAnalysis.versionLevelModeCapacityInformation"
+                [ test "Version01" <|
+                    \() ->
+                        Versions.versionLevelModeCapacityInformation Version22 Q Alphanumeric
+                            |> Expect.equal (Just 823)
                 ]
             ]
         ]

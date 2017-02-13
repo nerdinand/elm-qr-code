@@ -47,7 +47,19 @@ type Version
     | Version40
 
 
-optimumVersion : Int -> EncodingMode -> ErrorCorrection.Level -> Version
+type alias VersionCapacity =
+    List ( Level, VersionLevelCapacity )
+
+
+type alias VersionLevelCapacity =
+    List ( EncodingMode, Capacity )
+
+
+type alias Capacity =
+    Int
+
+
+optimumVersion : Int -> EncodingMode -> Level -> Version
 optimumVersion inputLength encodingMode errorCorrectionLevel =
     let
         ( _, _, _, _, version ) =
@@ -73,6 +85,37 @@ optimumVersion inputLength encodingMode errorCorrectionLevel =
                 )
     in
         version
+
+
+versionCapacityInformation : Version -> Maybe VersionCapacity
+versionCapacityInformation version =
+    filterTupleList version maximumCapacities
+        |> andThenMaybeSecond
+
+
+versionLevelCapacityInformation : Version -> Level -> Maybe VersionLevelCapacity
+versionLevelCapacityInformation version level =
+    versionCapacityInformation version
+        |> Maybe.andThen (\capacityInformation -> filterTupleList level capacityInformation)
+        |> andThenMaybeSecond
+
+
+versionLevelModeCapacityInformation : Version -> Level -> EncodingMode -> Maybe Capacity
+versionLevelModeCapacityInformation version level mode =
+    versionLevelCapacityInformation version level
+        |> Maybe.andThen (\capacityInformation -> filterTupleList mode capacityInformation)
+        |> andThenMaybeSecond
+
+
+andThenMaybeSecond : Maybe ( a, b ) -> Maybe b
+andThenMaybeSecond =
+    Maybe.andThen (\tuple -> Just (Tuple.second tuple))
+
+
+filterTupleList : a -> List ( a, b ) -> Maybe ( a, b )
+filterTupleList filterArgument list =
+    List.head
+        (List.filter (\tuple -> Tuple.first tuple == filterArgument) list)
 
 
 lData =
@@ -207,6 +250,7 @@ qData =
     ]
 
 
+maximumCapacities : List ( Version, VersionCapacity )
 maximumCapacities =
     [ ( Version01
       , [ ( L, [ ( Numeric, 41 ), ( Alphanumeric, 25 ), ( Byte, 17 ), ( Kanji, 10 ) ] )
