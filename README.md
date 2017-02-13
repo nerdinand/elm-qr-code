@@ -1,4 +1,7 @@
-# elm-qr-code
+# elm-qr-code 
+
+[![Build Status](https://travis-ci.org/nerdinand/elm-qr-code.svg?branch=master)](https://travis-ci.org/nerdinand/elm-qr-code)
+
 Eventually, this might become a QR-code generation library written in Elm.
 
 I started this as a project to teach myself the wonderful Elm programming language.
