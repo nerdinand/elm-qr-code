@@ -2,77 +2,57 @@ module Encoding.Alphanumeric exposing (encode)
 
 import String
 import Char
-import Encoding.Utility
 import List.Split
+import Module exposing (Module(..))
+import Encoding.Utility
 
 
-encode : String -> String
+encode : String -> List Module.Module
 encode input =
-    String.join ""
-        [ modeIndicatorBinaryString
-        , Encoding.Utility.encodeBinaryWithLength (toString (String.length input)) 8
-        , encodeBinary input
-        ]
+    encodeCharacterList (String.toList input)
 
 
-encodeBinary : String -> String
-encodeBinary input =
-    String.join ""
-        (List.map
-            elevenBitEncode
-            (List.Split.chunksOfLeft
-                2
-                (integerEncodedCharacterList input)
-            )
-        )
+bitEncodeWithPadding : Int -> Int -> List Module.Module
+bitEncodeWithPadding length toEncode =
+    List.map Module.intToModule
+        ((Encoding.Utility.toBase 2 toEncode) |> Encoding.Utility.padWithZeros length)
 
 
-modeIndicatorBinaryString : String
-modeIndicatorBinaryString =
-    "0010"
+encodeCharacterList : List Char -> List Module
+encodeCharacterList list =
+    case List.length list of
+        0 ->
+            []
+
+        1 ->
+            bitEncodeWithPadding 6 (lookUpInteger (Maybe.withDefault '0' (List.head list)))
+
+        _ ->
+            List.append
+                (bitEncodeWithPadding 11 (encodeCharacterPair (List.take 2 list)))
+                (encodeCharacterList (List.drop 2 list))
 
 
-elevenBitEncode : List Int -> String
-elevenBitEncode intList =
-    let
-        result =
-            let
-                reversedList =
-                    List.reverse intList
-            in
-                let
-                    low =
-                        case List.head reversedList of
-                            Just int ->
-                                int
-
-                            Nothing ->
-                                0
-
-                    high =
-                        case List.tail reversedList of
-                            Just list ->
-                                case List.head list of
-                                    Just int ->
-                                        int
-
-                                    Nothing ->
-                                        0
-
-                            Nothing ->
-                                0
-                in
-                    low + high * 45
-    in
-        if result < 63 then
-            Encoding.Utility.encodeBinaryWithLength (toString result) 5
-        else
-            Encoding.Utility.encodeBinaryWithLength (toString result) 10
+encodeHighCharacter : List Char -> Int
+encodeHighCharacter characters =
+    (List.head characters |> Maybe.map lookUpInteger |> orZero)
+        * 45
 
 
-integerEncodedCharacterList : String -> List Int
-integerEncodedCharacterList input =
-    List.map lookUpInteger (String.toList input)
+encodeLowCharacter : List Char -> Int
+encodeLowCharacter characters =
+    List.tail characters |> Maybe.andThen List.head |> Maybe.map lookUpInteger |> orZero
+
+
+encodeCharacterPair : List Char -> Int
+encodeCharacterPair characters =
+    encodeHighCharacter characters
+        + encodeLowCharacter characters
+
+
+orZero : Maybe Int -> Int
+orZero int =
+    Maybe.withDefault 0 int
 
 
 lookUpInteger : Char -> Int

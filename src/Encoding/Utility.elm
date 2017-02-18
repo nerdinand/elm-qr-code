@@ -1,21 +1,30 @@
-module Encoding.Utility exposing (encodeBinaryWithLength)
+module Encoding.Utility exposing (toBase, padWithZeros)
 
-import Bitwise exposing (shiftRightBy, and)
-import String
+{-| Convert a number to a list of digits in the given base. The input number is
+made positive first.
+    toBase 2 42 = [1, 0, 1, 0, 1, 0]  -- 42 in binary
+-}
+
+-- toBase taken from lynn/elm-arithmetic: https://github.com/lynn/elm-arithmetic/blob/master/src/Arithmetic.elm#L94
 
 
-encodeBinaryWithLength : String -> Int -> String
-encodeBinaryWithLength input length =
+toBase : Int -> Int -> List Int
+toBase base n =
     let
-        integer =
-            Result.withDefault 0 (String.toInt input)
+        n_ =
+            abs n
+
+        go x acc =
+            if x <= 0 then
+                acc
+            else
+                go (x // base) ((x % base) :: acc)
     in
-        String.reverse
-            (String.join ""
-                (List.map
-                    (\bitIndex ->
-                        toString ((shiftRightBy integer bitIndex) |> and 1)
-                    )
-                    (List.range 0 length)
-                )
-            )
+        go n_ []
+
+
+padWithZeros : Int -> List Int -> List Int
+padWithZeros desiredLength modules =
+    List.append
+        (List.repeat (desiredLength - List.length modules) 0)
+        modules

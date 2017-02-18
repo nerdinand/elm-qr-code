@@ -3,20 +3,14 @@ module Encoding.Numeric exposing (encode)
 import String
 import Array
 import Encoding.Utility
+import Module
 
 
-encode : String -> String
+encode : String -> List Module.Module
 encode input =
-    String.join ""
-        (modeIndicatorBinaryString
-            :: Encoding.Utility.encodeBinaryWithLength (toString (String.length input)) 9
-            :: List.map encodeBinary (partitionNumericString input)
-        )
-
-
-modeIndicatorBinaryString : String
-modeIndicatorBinaryString =
-    "0001"
+    partitionNumericString input
+        |> List.map encodeIntString
+        |> List.concat
 
 
 partitionNumericString : String -> List String
@@ -27,11 +21,30 @@ partitionNumericString input =
         (String.left 3 input) :: (partitionNumericString (String.dropLeft 3 input))
 
 
-encodeBinary : String -> String
-encodeBinary input =
-    Encoding.Utility.encodeBinaryWithLength input (requiredBits input)
+encodeIntString : String -> List Module.Module
+encodeIntString input =
+    let
+        intLength =
+            String.length input
+    in
+        String.toInt input
+            |> Result.withDefault 0
+            |> Encoding.Utility.toBase 2
+            |> Encoding.Utility.padWithZeros (binaryLength intLength)
+            |> List.map Module.intToModule
 
 
-requiredBits : String -> Int
-requiredBits input =
-    Maybe.withDefault 0 (Array.get ((String.length input) - 1) (Array.fromList [ 3, 6, 9 ]))
+binaryLength : Int -> Int
+binaryLength intLength =
+    case intLength of
+        3 ->
+            10
+
+        2 ->
+            7
+
+        1 ->
+            4
+
+        _ ->
+            0

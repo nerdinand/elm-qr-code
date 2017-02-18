@@ -1,4 +1,4 @@
-module Module exposing (toString, Module(..), toModules)
+module Module exposing (toString, Module(..), toModules, intToModule)
 
 import String
 
@@ -12,6 +12,19 @@ toString : List Module -> String
 toString modules =
     String.join ""
         (List.map moduleToString modules)
+
+
+intToModule : Int -> Module
+intToModule int =
+    case int of
+        0 ->
+            Zero
+
+        1 ->
+            One
+
+        _ ->
+            Zero
 
 
 moduleToString : Module -> String

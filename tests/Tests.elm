@@ -10,6 +10,8 @@ import Module exposing (..)
 import Versions exposing (Version(..))
 import EncodingMode exposing (..)
 import ErrorCorrection exposing (Level(..))
+import Encoding.Alphanumeric
+import Encoding.Numeric
 
 
 all : Test
@@ -94,6 +96,30 @@ all =
                     \() ->
                         EncodingMode.encodingModeToModules Byte
                             |> Expect.equal [ Zero, One, Zero, Zero ]
+                ]
+            ]
+        , describe "Encoding.Alphanumeric"
+            [ describe "Encoding.Alphanumeric.encode"
+                [ test "returns the binary encoding for an alphanumeric string" <|
+                    \() ->
+                        Encoding.Alphanumeric.encode "HELLO WORLD"
+                            |> Expect.equal (Module.toModules "01100001011 01111000110 10001011100 10110111000 10011010100 001101")
+                ]
+            ]
+        , describe "Encoding.Numeric"
+            [ describe "Encoding.Numeric.encode"
+                [ test "8675309" <|
+                    \() ->
+                        Encoding.Numeric.encode "8675309"
+                            |> Expect.equal (Module.toModules "1101100011 1000010010 1001")
+                , test "01234567" <|
+                    \() ->
+                        Encoding.Numeric.encode "01234567"
+                            |> Expect.equal (Module.toModules "0000001100 0101011001 1000011")
+                , test "0123456789012345" <|
+                    \() ->
+                        Encoding.Numeric.encode "0123456789012345"
+                            |> Expect.equal (Module.toModules "0000001100 0101011001 1010100110 1110000101 0011101010 0101")
                 ]
             ]
         ]
