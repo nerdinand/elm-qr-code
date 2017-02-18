@@ -39,4 +39,4 @@ versionForData input =
         errorCorrectionLevel =
             Q
     in
-        optimumVersion (Debug.log "length" inputLength) (Debug.log "mode" encodingMode) errorCorrectionLevel
+        optimumVersion inputLength errorCorrectionLevel encodingMode

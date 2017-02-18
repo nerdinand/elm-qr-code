@@ -56,7 +56,7 @@ all =
                     \() ->
                         "HELLO WORLD"
                             |> DataAnalysis.versionForData
-                            |> Expect.equal Version02
+                            |> Expect.equal Version01
                 , test "0123456789012345678901234567890" <|
                     \() ->
                         "0123456789012345678901234567890"
@@ -68,6 +68,12 @@ all =
                     \() ->
                         Versions.versionLevelModeCapacityInformation Version22 Q Alphanumeric
                             |> Expect.equal (Just 823)
+                ]
+            , describe "Versions.optimumVersion"
+                [ test "" <|
+                    \() ->
+                        Versions.optimumVersion 234 L Numeric
+                            |> Expect.equal Version05
                 ]
             ]
         ]

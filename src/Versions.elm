@@ -2,6 +2,7 @@ module Versions exposing (..)
 
 import ErrorCorrection exposing (..)
 import EncodingMode exposing (..)
+import Array
 
 
 type Version
@@ -59,32 +60,24 @@ type alias Capacity =
     Int
 
 
-optimumVersion : Int -> EncodingMode -> Level -> Version
-optimumVersion inputLength encodingMode errorCorrectionLevel =
+optimumVersion : Capacity -> Level -> EncodingMode -> Version
+optimumVersion capacity level mode =
     let
-        ( _, _, _, _, version ) =
-            Maybe.withDefault ( 0, 0, 0, 0, Version40 )
+        allVersions =
+            List.map Tuple.first maximumCapacities
+
+        versionCapacities =
+            List.map (\version -> ( version, versionLevelModeCapacityInformation version level mode )) allVersions
+    in
+        Tuple.first
+            (Maybe.withDefault ( Version01, Just 0 )
                 (List.head
                     (List.filter
-                        (\( numericCapacity, alphanumericCapacity, byteCapacity, kanjiCapacity, version ) ->
-                            case encodingMode of
-                                Numeric ->
-                                    inputLength <= numericCapacity
-
-                                Alphanumeric ->
-                                    inputLength <= alphanumericCapacity
-
-                                Byte ->
-                                    inputLength <= byteCapacity
-
-                                Kanji ->
-                                    inputLength <= kanjiCapacity
-                        )
-                        qData
+                        (\versionCapacity -> Maybe.withDefault 0 (Tuple.second versionCapacity) >= capacity)
+                        versionCapacities
                     )
                 )
-    in
-        version
+            )
 
 
 versionCapacityInformation : Version -> Maybe VersionCapacity
@@ -116,138 +109,6 @@ filterTupleList : a -> List ( a, b ) -> Maybe ( a, b )
 filterTupleList filterArgument list =
     List.head
         (List.filter (\tuple -> Tuple.first tuple == filterArgument) list)
-
-
-lData =
-    [ ( 41, 25, 17, 10, Version01 )
-    , ( 77, 47, 32, 20, Version02 )
-    , ( 127, 77, 53, 32, Version03 )
-    , ( 187, 114, 78, 48, Version04 )
-    , ( 255, 154, 106, 65, Version05 )
-    , ( 322, 195, 134, 82, Version06 )
-    , ( 370, 224, 154, 95, Version07 )
-    , ( 461, 279, 192, 118, Version08 )
-    , ( 552, 335, 230, 141, Version09 )
-    , ( 652, 395, 271, 167, Version10 )
-    , ( 772, 468, 321, 198, Version11 )
-    , ( 883, 535, 367, 226, Version12 )
-    , ( 1022, 619, 425, 262, Version13 )
-    , ( 1101, 667, 458, 282, Version14 )
-    , ( 1250, 758, 520, 320, Version15 )
-    , ( 1408, 854, 586, 361, Version16 )
-    , ( 1548, 938, 644, 397, Version17 )
-    , ( 1725, 1046, 718, 442, Version18 )
-    , ( 1903, 1153, 792, 488, Version19 )
-    , ( 2061, 1249, 858, 528, Version20 )
-    , ( 2232, 1352, 929, 572, Version21 )
-    , ( 2409, 1460, 1003, 618, Version22 )
-    , ( 2620, 1588, 1091, 672, Version23 )
-    , ( 2812, 1704, 1171, 721, Version24 )
-    , ( 3057, 1853, 1273, 784, Version25 )
-    , ( 3283, 1990, 1367, 842, Version26 )
-    , ( 3517, 2132, 1465, 902, Version27 )
-    , ( 3669, 2223, 1528, 940, Version28 )
-    , ( 3909, 2369, 1628, 1002, Version29 )
-    , ( 4158, 2520, 1732, 1066, Version30 )
-    , ( 4417, 2677, 1840, 1132, Version31 )
-    , ( 4686, 2840, 1952, 1201, Version32 )
-    , ( 4965, 3009, 2068, 1273, Version33 )
-    , ( 5253, 3183, 2188, 1347, Version34 )
-    , ( 5529, 3351, 2303, 1417, Version35 )
-    , ( 5836, 3537, 2431, 1496, Version36 )
-    , ( 6153, 3729, 2563, 1577, Version37 )
-    , ( 6479, 3927, 2699, 1661, Version38 )
-    , ( 6743, 4087, 2809, 1729, Version39 )
-    , ( 7089, 4296, 2953, 1817, Version40 )
-    ]
-
-
-mData =
-    [ ( 34, 20, 14, 8, Version01 )
-    , ( 63, 38, 26, 16, Version02 )
-    , ( 101, 61, 42, 26, Version03 )
-    , ( 149, 90, 62, 38, Version04 )
-    , ( 202, 122, 84, 52, Version05 )
-    , ( 255, 154, 106, 65, Version06 )
-    , ( 293, 178, 122, 75, Version07 )
-    , ( 365, 221, 152, 93, Version08 )
-    , ( 432, 262, 180, 111, Version09 )
-    , ( 513, 311, 213, 131, Version10 )
-    , ( 604, 366, 251, 155, Version11 )
-    , ( 691, 419, 287, 177, Version12 )
-    , ( 796, 483, 331, 204, Version13 )
-    , ( 871, 528, 362, 223, Version14 )
-    , ( 991, 600, 412, 254, Version15 )
-    , ( 1082, 656, 450, 277, Version16 )
-    , ( 1212, 734, 504, 310, Version17 )
-    , ( 1346, 816, 560, 345, Version18 )
-    , ( 1500, 909, 624, 384, Version19 )
-    , ( 1600, 970, 666, 410, Version20 )
-    , ( 1708, 1035, 711, 438, Version21 )
-    , ( 1872, 1134, 779, 480, Version22 )
-    , ( 2059, 1248, 857, 528, Version23 )
-    , ( 2188, 1326, 911, 561, Version24 )
-    , ( 2395, 1451, 997, 614, Version25 )
-    , ( 2544, 1542, 1059, 652, Version26 )
-    , ( 2701, 1637, 1125, 692, Version27 )
-    , ( 2857, 1732, 1190, 732, Version28 )
-    , ( 3035, 1839, 1264, 778, Version29 )
-    , ( 3289, 1994, 1370, 843, Version30 )
-    , ( 3486, 2113, 1452, 894, Version31 )
-    , ( 3693, 2238, 1538, 947, Version32 )
-    , ( 3909, 2369, 1628, 1002, Version33 )
-    , ( 4134, 2506, 1722, 1060, Version34 )
-    , ( 4343, 2632, 1809, 1113, Version35 )
-    , ( 4588, 2780, 1911, 1176, Version36 )
-    , ( 4775, 2894, 1989, 1224, Version37 )
-    , ( 5039, 3054, 2099, 1292, Version38 )
-    , ( 5313, 3220, 2213, 1362, Version39 )
-    , ( 5596, 3391, 2331, 1435, Version40 )
-    ]
-
-
-qData =
-    [ ( 27, 16, 11, 7, Version01 )
-    , ( 48, 29, 20, 12, Version02 )
-    , ( 77, 47, 32, 20, Version03 )
-    , ( 111, 67, 46, 28, Version04 )
-    , ( 144, 87, 60, 37, Version05 )
-    , ( 178, 108, 74, 45, Version06 )
-    , ( 207, 125, 86, 53, Version07 )
-    , ( 259, 157, 108, 66, Version08 )
-    , ( 312, 189, 130, 80, Version09 )
-    , ( 364, 221, 151, 93, Version10 )
-    , ( 427, 259, 177, 109, Version11 )
-    , ( 489, 296, 203, 125, Version12 )
-    , ( 580, 352, 241, 149, Version13 )
-    , ( 621, 376, 258, 159, Version14 )
-    , ( 703, 426, 292, 180, Version15 )
-    , ( 775, 470, 322, 198, Version16 )
-    , ( 876, 531, 364, 224, Version17 )
-    , ( 948, 574, 394, 243, Version18 )
-    , ( 1063, 644, 442, 272, Version19 )
-    , ( 1159, 702, 482, 297, Version20 )
-    , ( 1224, 742, 509, 314, Version21 )
-    , ( 1358, 823, 565, 348, Version22 )
-    , ( 1468, 890, 611, 376, Version23 )
-    , ( 1588, 963, 661, 407, Version24 )
-    , ( 1718, 1041, 715, 440, Version25 )
-    , ( 1804, 1094, 751, 462, Version26 )
-    , ( 1933, 1172, 805, 496, Version27 )
-    , ( 2085, 1263, 868, 534, Version28 )
-    , ( 2181, 1322, 908, 559, Version29 )
-    , ( 2358, 1429, 982, 604, Version30 )
-    , ( 2473, 1499, 1030, 634, Version31 )
-    , ( 2670, 1618, 1112, 684, Version32 )
-    , ( 2805, 1700, 1168, 719, Version33 )
-    , ( 2949, 1787, 1228, 756, Version34 )
-    , ( 3081, 1867, 1283, 790, Version35 )
-    , ( 3244, 1966, 1351, 832, Version36 )
-    , ( 3417, 2071, 1423, 876, Version37 )
-    , ( 3599, 2181, 1499, 923, Version38 )
-    , ( 3791, 2298, 1579, 972, Version39 )
-    , ( 3993, 2420, 1663, 1024, Version40 )
-    ]
 
 
 maximumCapacities : List ( Version, VersionCapacity )
