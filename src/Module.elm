@@ -9,9 +9,9 @@ type Module
 
 
 toString : List Module -> String
-toString mods =
+toString modules =
     String.join ""
-        (List.map moduleToString mods)
+        (List.map moduleToString modules)
 
 
 moduleToString : Module -> String

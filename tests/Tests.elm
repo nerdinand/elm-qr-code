@@ -27,7 +27,7 @@ all =
                         |> Module.toModules
                         |> Expect.equal [ Zero, One, Zero, One, One, Zero, Zero, One ]
             ]
-        , describe "Data analysis"
+        , describe "DataAnalysis"
             [ describe "DataAnalysis.encodingModeForData"
                 [ test "012346789" <|
                     \() ->
@@ -69,17 +69,25 @@ all =
                         Versions.versionLevelModeCapacityInformation Version22 Q Alphanumeric
                             |> Expect.equal (Just 823)
                 ]
-            , describe "Versions.optimumVersion"
-                [ test "" <|
+            ]
+        , describe "Versions"
+            [ describe "Versions.optimumVersion"
+                [ test "Returns a big enough Version for the amount of data" <|
                     \() ->
                         Versions.optimumVersion 234 L Numeric
                             |> Expect.equal (Just Version05)
-                ]
-            , describe "Versions.optimumVersion"
-                [ test "" <|
+                , test "Returns Nothing for too long data" <|
                     \() ->
-                        Versions.optimumVersion 10000 L Numeric
+                        Versions.optimumVersion 10000 M Kanji
                             |> Expect.equal Nothing
+                ]
+            ]
+        , describe "EncodingMode"
+            [ describe "EncodingMode.encodingModeToModules"
+                [ test "returns the encoding mode indicators as modules" <|
+                    \() ->
+                        EncodingMode.encodingModeToModules Byte
+                            |> Expect.equal [ Zero, One, Zero, Zero ]
                 ]
             ]
         ]
