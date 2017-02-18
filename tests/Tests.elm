@@ -81,6 +81,12 @@ all =
                         Versions.optimumVersion 10000 M Kanji
                             |> Expect.equal Nothing
                 ]
+            , describe "Versions.characterCountLength"
+                [ test "" <|
+                    \() ->
+                        Versions.characterCountLength Version06 Alphanumeric
+                            |> Expect.equal (Just 9)
+                ]
             ]
         , describe "EncodingMode"
             [ describe "EncodingMode.encodingModeToModules"

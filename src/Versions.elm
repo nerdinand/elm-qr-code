@@ -394,3 +394,57 @@ maximumCapacities =
         ]
       )
     ]
+
+
+characterCountLength : Version -> EncodingMode -> Maybe Int
+characterCountLength version mode =
+    filterTupleList version characterCountLengths
+        |> andThenMaybeSecond
+        |> Maybe.withDefault []
+        |> filterTupleList mode
+        |> andThenMaybeSecond
+
+
+characterCountLengths : List ( Version, List ( EncodingMode, Int ) )
+characterCountLengths =
+    [ ( Version01, [ ( Numeric, 10 ), ( Alphanumeric, 9 ), ( Byte, 8 ), ( Kanji, 8 ) ] )
+    , ( Version02, [ ( Numeric, 10 ), ( Alphanumeric, 9 ), ( Byte, 8 ), ( Kanji, 8 ) ] )
+    , ( Version03, [ ( Numeric, 10 ), ( Alphanumeric, 9 ), ( Byte, 8 ), ( Kanji, 8 ) ] )
+    , ( Version04, [ ( Numeric, 10 ), ( Alphanumeric, 9 ), ( Byte, 8 ), ( Kanji, 8 ) ] )
+    , ( Version05, [ ( Numeric, 10 ), ( Alphanumeric, 9 ), ( Byte, 8 ), ( Kanji, 8 ) ] )
+    , ( Version06, [ ( Numeric, 10 ), ( Alphanumeric, 9 ), ( Byte, 8 ), ( Kanji, 8 ) ] )
+    , ( Version07, [ ( Numeric, 10 ), ( Alphanumeric, 9 ), ( Byte, 8 ), ( Kanji, 8 ) ] )
+    , ( Version08, [ ( Numeric, 10 ), ( Alphanumeric, 9 ), ( Byte, 8 ), ( Kanji, 8 ) ] )
+    , ( Version09, [ ( Numeric, 10 ), ( Alphanumeric, 9 ), ( Byte, 8 ), ( Kanji, 8 ) ] )
+    , ( Version10, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version11, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version12, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version13, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version14, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version15, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version16, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version17, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version18, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version19, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version20, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version21, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version22, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version23, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version24, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version25, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version26, [ ( Numeric, 12 ), ( Alphanumeric, 11 ), ( Byte, 16 ), ( Kanji, 10 ) ] )
+    , ( Version27, [ ( Numeric, 14 ), ( Alphanumeric, 13 ), ( Byte, 16 ), ( Kanji, 12 ) ] )
+    , ( Version28, [ ( Numeric, 14 ), ( Alphanumeric, 13 ), ( Byte, 16 ), ( Kanji, 12 ) ] )
+    , ( Version29, [ ( Numeric, 14 ), ( Alphanumeric, 13 ), ( Byte, 16 ), ( Kanji, 12 ) ] )
+    , ( Version30, [ ( Numeric, 14 ), ( Alphanumeric, 13 ), ( Byte, 16 ), ( Kanji, 12 ) ] )
+    , ( Version31, [ ( Numeric, 14 ), ( Alphanumeric, 13 ), ( Byte, 16 ), ( Kanji, 12 ) ] )
+    , ( Version32, [ ( Numeric, 14 ), ( Alphanumeric, 13 ), ( Byte, 16 ), ( Kanji, 12 ) ] )
+    , ( Version33, [ ( Numeric, 14 ), ( Alphanumeric, 13 ), ( Byte, 16 ), ( Kanji, 12 ) ] )
+    , ( Version34, [ ( Numeric, 14 ), ( Alphanumeric, 13 ), ( Byte, 16 ), ( Kanji, 12 ) ] )
+    , ( Version35, [ ( Numeric, 14 ), ( Alphanumeric, 13 ), ( Byte, 16 ), ( Kanji, 12 ) ] )
+    , ( Version36, [ ( Numeric, 14 ), ( Alphanumeric, 13 ), ( Byte, 16 ), ( Kanji, 12 ) ] )
+    , ( Version37, [ ( Numeric, 14 ), ( Alphanumeric, 13 ), ( Byte, 16 ), ( Kanji, 12 ) ] )
+    , ( Version38, [ ( Numeric, 14 ), ( Alphanumeric, 13 ), ( Byte, 16 ), ( Kanji, 12 ) ] )
+    , ( Version39, [ ( Numeric, 14 ), ( Alphanumeric, 13 ), ( Byte, 16 ), ( Kanji, 12 ) ] )
+    , ( Version40, [ ( Numeric, 14 ), ( Alphanumeric, 13 ), ( Byte, 16 ), ( Kanji, 12 ) ] )
+    ]
