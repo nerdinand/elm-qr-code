@@ -27,7 +27,7 @@ alphanumericRegex =
     Regex.regex "^[0-9A-Z \\-$%\\*\\+\\-\\./:]*$"
 
 
-versionForData : String -> Version
+versionForData : String -> Maybe Version
 versionForData input =
     let
         inputLength =

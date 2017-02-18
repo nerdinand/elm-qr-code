@@ -60,17 +60,17 @@ type alias Capacity =
     Int
 
 
-optimumVersion : Capacity -> Level -> EncodingMode -> Version
+optimumVersion : Capacity -> Level -> EncodingMode -> Maybe Version
 optimumVersion capacity level mode =
     let
         allVersions =
             List.map Tuple.first maximumCapacities
 
         versionCapacities =
-            List.map (\version -> ( version, versionLevelModeCapacityInformation version level mode )) allVersions
+            List.map (\version -> ( Just version, versionLevelModeCapacityInformation version level mode )) allVersions
     in
         Tuple.first
-            (Maybe.withDefault ( Version01, Just 0 )
+            (Maybe.withDefault ( Nothing, Nothing )
                 (List.head
                     (List.filter
                         (\versionCapacity -> Maybe.withDefault 0 (Tuple.second versionCapacity) >= capacity)
