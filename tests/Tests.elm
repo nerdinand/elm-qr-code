@@ -57,12 +57,12 @@ all =
                 [ test "HELLO WORLD" <|
                     \() ->
                         "HELLO WORLD"
-                            |> DataAnalysis.versionForData
+                            |> DataAnalysis.versionForData Q
                             |> Expect.equal (Just Version01)
                 , test "0123456789012345678901234567890" <|
                     \() ->
                         "0123456789012345678901234567890"
-                            |> DataAnalysis.versionForData
+                            |> DataAnalysis.versionForData Q
                             |> Expect.equal (Just Version02)
                 ]
             , describe "DataAnalysis.versionLevelModeCapacityInformation"
@@ -104,6 +104,10 @@ all =
                     \() ->
                         Encoding.Alphanumeric.encode "HELLO WORLD"
                             |> Expect.equal (Module.toModules "01100001011 01111000110 10001011100 10110111000 10011010100 001101")
+                , test "" <|
+                    \() ->
+                        Encoding.Alphanumeric.encode "AC-42"
+                            |> Expect.equal (Module.toModules "00111001110 11100111001 000010")
                 ]
             ]
         , describe "Encoding.Numeric"

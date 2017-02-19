@@ -27,16 +27,13 @@ alphanumericRegex =
     Regex.regex "^[0-9A-Z \\-$%\\*\\+\\-\\./:]*$"
 
 
-versionForData : String -> Maybe Version
-versionForData input =
+versionForData : ErrorCorrection.Level -> String -> Maybe Version
+versionForData errorCorrectionLevel input =
     let
         inputLength =
             String.length input
 
         encodingMode =
             encodingModeForData input
-
-        errorCorrectionLevel =
-            Q
     in
         optimumVersion inputLength errorCorrectionLevel encodingMode
