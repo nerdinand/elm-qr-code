@@ -1,6 +1,6 @@
 module Encoding exposing (encode)
 
-import Module
+import Module exposing (Module(..))
 import DataAnalysis
 import EncodingMode
 import ErrorCorrection
@@ -22,20 +22,57 @@ encode errorCorrectionLevel input =
         version =
             Maybe.withDefault Versions.Version01
                 (Versions.optimumVersion inputLength errorCorrectionLevel encodingMode)
-    in
-        encodeWithModeAndCount encodingMode version input
-            |> padWithTerminator errorCorrectionLevel version
-
-
-padWithTerminator : ErrorCorrection.Level -> Versions.Version -> List Module.Module -> List Module.Module
-padWithTerminator level version modules =
-    let
-        modulesLength =
-            List.length modules
 
         totalDataCodewordCount =
             Maybe.withDefault 0
-                (Versions.totalDataCodewordCount version level)
+                (Versions.totalDataCodewordCount version errorCorrectionLevel)
+    in
+        encodeWithModeAndCount encodingMode version input
+            |> padWithTerminator totalDataCodewordCount
+            |> padToFullBytes
+            |> padWithPadBytes totalDataCodewordCount
+
+
+padWithPadBytes : Int -> List Module.Module -> List Module.Module
+padWithPadBytes totalDataCodewordCount modules =
+    let
+        length =
+            List.length modules
+
+        padBytes =
+            [ One, One, One, Zero, One, One, Zero, Zero, Zero, Zero, Zero, One, Zero, Zero, Zero, One ]
+
+        missingBits =
+            (totalDataCodewordCount * 8) - length
+
+        paddedModules =
+            List.append
+                modules
+                (List.take missingBits padBytes)
+    in
+        if missingBits > 16 then
+            padWithPadBytes totalDataCodewordCount paddedModules
+        else
+            paddedModules
+
+
+padToFullBytes : List Module.Module -> List Module.Module
+padToFullBytes modules =
+    let
+        length =
+            List.length modules
+    in
+        if length % 8 == 0 then
+            modules
+        else
+            appendZeros (8 - (length % 8)) modules
+
+
+padWithTerminator : Int -> List Module.Module -> List Module.Module
+padWithTerminator totalDataCodewordCount modules =
+    let
+        modulesLength =
+            List.length modules
 
         paddingSize =
             (totalDataCodewordCount * 8) - modulesLength
