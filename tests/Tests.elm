@@ -126,4 +126,24 @@ all =
                             |> Expect.equal (Module.toModules "0000001100 0101011001 1010100110 1110000101 0011101010 0101")
                 ]
             ]
+        , describe "Encoding"
+            [ describe "Encoding.encode"
+                [ test "HELLO WORLD" <|
+                    \() ->
+                        Encoding.encode M "HELLO WORLD"
+                            |> Expect.equal (Module.toModules "0010 000001011 01100001011 01111000110 10001011100 10110111000 10011010100 001101")
+                , test "AC-42" <|
+                    \() ->
+                        Encoding.encode Q "AC-42"
+                            |> Expect.equal (Module.toModules "0010 000000101 00111001110 11100111001 000010")
+                , test "01234567" <|
+                    \() ->
+                        Encoding.encode L "01234567"
+                            |> Expect.equal (Module.toModules "0001 0000001000 0000001100 0101011001 1000011")
+                , test "0123456789012345" <|
+                    \() ->
+                        Encoding.encode H "0123456789012345"
+                            |> Expect.equal (Module.toModules "0001 0000010000 0000001100 0101011001 1010100110 1110000101 0011101010 0101")
+                ]
+            ]
         ]

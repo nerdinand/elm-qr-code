@@ -24,7 +24,7 @@ toBase base n =
 
 
 padWithZeros : Int -> List Int -> List Int
-padWithZeros desiredLength modules =
+padWithZeros desiredLength binaryIntegers =
     List.append
-        (List.repeat (desiredLength - List.length modules) 0)
-        modules
+        (List.repeat (desiredLength - List.length binaryIntegers) 0)
+        binaryIntegers
